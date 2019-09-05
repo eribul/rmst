@@ -10,4 +10,4 @@ Files within this project are organized according to the [ProjectTemplate](http:
 
 ## Data
 
-The project relies on sensitive patient data that can not be shared publically, and is therefore not insluded in this repository.
+The project relies on sensitive patient data that can not be shared publically, and is therefore not included in this repository.
