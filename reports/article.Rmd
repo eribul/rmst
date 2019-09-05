@@ -15,6 +15,8 @@ options(
   repos = list(CRAN = "https://cran.rstudio.com/")
 )
 knitr::opts_chunk$set(echo = FALSE, root.dir = '..')
+library(tidyverse)
+load("../cache/df.RData")
 ```
 
 ORIGINAL RESEARCH
@@ -63,10 +65,10 @@ Our aim in this paper was to assess the association between the Elixhauser comor
 
 ## Patients and data
 <!-- In red -->
-We identified **120,836 [!!!] ** patients from the Swedish Hip Arthroplasty Register (SHAR) who underwent THA in the period **1999–2012** and who matched our inclusion criteria (Figure \@ref(fig:flowchart)). 
+We identified patients from the Swedish Hip Arthroplasty Register (SHAR) who underwent THA for primary hip osteoarthritis 1999–2015 and who matched our inclusion criteria (Figure \@ref(fig:flowchart)). 
 <!-- Stop in red -->
 
-These patients were linked to the Swedish National Patient Register (NPR) [@Cnudde2016] which provided the ICD-10 codes. Individual ICD-10 codes were first identified as different comorbidities, then combined into Elixhauser Comorbidity Index. The window for inclusion ICD-10 codes was set from 366 to 1 day prior to surgery. For future details on the patient data please see [@Bulow2017]. 
+These patients were linked to the Swedish National Patient Register (NPR) [@Cnudde2016] which provided the ICD-10 codes. Individual ICD-10 codes were first identified as different comorbidities, then combined into Elixhauser Comorbidity Index. The window for inclusion ICD-10 codes was set from 366 to 1 day prior to surgery. Patients with no recorded pre-opetative hospital visit were assumed to have no comorbidity, thus ECI = 0. For future details on the patient data please see [@Bulow2017]. 
 
 
 ## Statistical analysis
@@ -83,15 +85,20 @@ Ethics approval was obtained from the Regional Ethical Review Board in Gothenbur
 
 # Results
 
-Of the **120,836** included in the study **63.5 %** had no comorbidities, **22.1 %** one comorbidity, **9.5 % two**, **3.4 %** three and **1.5 %** of the patients had 4 or more comorbidities. 
-From the onset of the follow-up we saw a clear association between survival and Elixhauser comorbidity index (Figure \@ref(fig:rmst)). The expected life time lost increased statistically significantly with comorbidity at all listed time points **(Table 1)**. Although, at the beginning of the follow-up this difference was statistically significant, we cannot claim clinical significance. The time lost in the first 30 days after the hip replacement surgery did not exceed 6 hours. At the end of the chosen follow-up at 10 years patients with pre-operative Elixhauser score of zero lost in average less than one year expected survival time. This figure increased with Elixhauser score and loss for patients with score 4 or above exceeded 3 years. The restricted men time lost was between factor 2 and factor 8 higher in groups with comorbidities than in patients with Elixhauser score zero. As expected this was less and less notable with passing time (Figure \@ref(fig:rmtl)). 
+```{r}
+n <- count(df, ECI) %>% deframe()
+p <- sprintf("%.0f %%", n / sum(n) * 100)
+```
+
+There were `r n_distinct(df$LopNr)` patients included in the study (**Figure flowchart**). `r p[1]` had no comorbidities, `r p[2]` had one, `r p[3]` had two, `r p[4]` three and `r p[5]` had four or more (Table \@ref(tab:table1)).
+From the onset of the follow-up we saw a clear association between survival and ECI (Figure \@ref(fig:rmst)). The expected life time lost increased statistically significantly with comorbidity at all listed time points (Table \@ref(tab:tableres)). Although, at the beginning of the follow-up this difference was statistically significant, we cannot claim clinical significance. The time lost in the first 30 days after the hip replacement surgery did not exceed 6 hours. At the end of the chosen follow-up at 10 years patients with pre-operative Elixhauser score of zero lost in average less than one year expected survival time. This figure increased with Elixhauser score and loss for patients with score 4 or above exceeded 3 years. The restricted men time lost was between factor 2 and factor 8 higher in groups with comorbidities than in patients with Elixhauser score zero. As expected this was less and less notable with passing time (Figure \@ref(fig:rmtl)). 
 
 
 # Discussion
 
 Neither a clinician nor a survival curve can predict with absolute certainty how long a patient will live, providing estimates on years lost may improve the accuracy of the prognostic estimates that influence clinical decisions and information given to patients [@Couchoud2017]. While for ranking individual survival times comorbidity scores such as the Elixhauser index have low precision [@Bulow2017; @Bulow2019] we have seen here that at group level there are clear separation between patients with different Elixhauser scores. Thus, for health administrative purposes there might be added value in considering comorbidities.
 
-In absolute values the restricted mean time lost increased with time irrespectively of Elixhauser score. The relative loss was higher at the beginning at the follow-up period than at the end. There is an increased short-term mortality after the hip replacement surgery [@Pedersen2011; @Cnudde2018b], and this is likely to be influenced by co-morbidities the patient might have. Though, 90-day restricted mean time lost for the group of patients with Elixhauser index of 4 or more was only 1 day, approximatively 8 times longer than for the group with no-comorbidities. This relative difference decreases with time and at the 10-year follow up patients with Elixhauser index of 4 lose 3.8 times more days that the group with no comorbidities. This convergence of the day restricted mean time lost curves coincides with the decrease of  predictive power reported by Bulow et al. [@Bulow2017]. If we follow-up the dichotomy by Shmueli et al. [@Shmueli2011] we could conclude that predictive studies/risk calculators gain lite from considering the Elixhauser comorbidity index. However, for studies that aim to estimate effects of different treatment options  comorbidity indices can be important confounders and important for case-mix adjustments [@Inacio2015a]. Health-care administrators gain form considering comorbidities by getting better estimates of future need of revisions. The revision rate of hip replacements is low [@Bayliss2017], however with increased survival rates [@Schwartsmann2015] there is need of accurate long term estimates of number patients at risk, and here considering comorbidities could be considered worthwhile. 
+In absolute values the restricted mean time lost increased with time irrespectively of Elixhauser score. The relative loss was higher at the beginning at the follow-up period than at the end. There is an increased short-term mortality after the hip replacement surgery [@Pedersen2011; @Cnudde2018b], and this is likely to be influenced by co-morbidities the patient might have. Though, 90-day restricted mean time lost for the group of patients with Elixhauser index of 4 or more was only **1** day, approximatively **8** times longer than for the group with no-comorbidities. This relative difference decreases with time and at the 10-year follow up patients with Elixhauser index of 4 lose **3.8** times more days that the group with no comorbidities. This convergence of the day restricted mean time lost curves coincides with the decrease of  predictive power reported by Bulow et al. [@Bulow2017]. If we follow-up the dichotomy by Shmueli et al. [@Shmueli2011] we could conclude that predictive studies/risk calculators gain lite from considering the Elixhauser comorbidity index. However, for studies that aim to estimate effects of different treatment options  comorbidity indices can be important confounders and important for case-mix adjustments [@Inacio2015a]. Health-care administrators gain form considering comorbidities by getting better estimates of future need of revisions. The revision rate of hip replacements is low [@Bayliss2017], however with increased survival rates [@Schwartsmann2015] there is need of accurate long term estimates of number patients at risk, and here considering comorbidities could be considered worthwhile. 
 
 # Conclusion
 
@@ -103,6 +110,18 @@ Grants from the Swedish state under the agreement between the Swedish government
 
 
 <!-- Tables -->
+
+```{r table1}
+load("../cache/table1.RData")
+tableone::kableone(table1, caption = "XXX")
+```
+
+
+```{r tableres}
+load("../cache/table_rmst_rmtl.RData")
+knitr::kable(table_rmst_rmtl, caption = "XXX")
+```
+
 
 <!-- Figures -->
 
