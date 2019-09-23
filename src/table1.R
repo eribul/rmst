@@ -7,7 +7,7 @@ df_table1 <-
     Event = if_else(d, "Dead", "Censored"),
     Sex,
     Age,
-    ECI
+    Elixhauser = ECI
   )
 
 table1 <-

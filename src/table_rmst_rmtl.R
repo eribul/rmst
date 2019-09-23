@@ -6,7 +6,7 @@ table_rmst_rmtl <-
   unnest(data) %>%
   filter(days %in% c(90, 365 * c(1, 5, 10))) %>%
   transmute(
-    ECI = gsub("ECI=", "", strata),
+    Elixhauser = gsub("ECI=", "", strata),
     time = case_when(
       years < 1  ~ "1 / 4 years",
       years == 1 ~ "1 year",
@@ -18,8 +18,8 @@ table_rmst_rmtl <-
   gather("Measure", "est with 95 % CI", RMST, RMTL) %>%
   spread(time, `est with 95 % CI`) %>%
   mutate(
-    ECI = if_else(duplicated(ECI), "", ECI)
+    Elixhauser = if_else(duplicated(Elixhauser), "", Elixhauser)
   ) %>%
-  select(ECI, Measure, `1 year`, `5 years`, `10 years`)
+  select(Elixhauser, Measure, `1 year`, `5 years`, `10 years`)
 
 cache("table_rmst_rmtl")

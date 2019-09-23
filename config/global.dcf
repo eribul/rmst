@@ -16,7 +16,8 @@ libraries:
   tableone,
   DiagrammeR,
   DiagrammeRsvg,
-  rsvg
+  rsvg,
+  survRM2
 as_factors:                FALSE
 tables_type:               tibble
 attach_internal_libraries: FALSE
