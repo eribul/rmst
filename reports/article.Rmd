@@ -5,7 +5,7 @@ output:
     toc: false
     df_print: kable
     reference_docx: mall.dotx
-csl: jama.csl
+csl: http://www.zotero.org/styles/jama
 ---
 
 ```{r setup, include = FALSE}
