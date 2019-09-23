@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/187520087.svg)](https://zenodo.org/badge/latestdoi/187520087)
+
 # RMST
 
 Hare are script-files and results related to the article on restricted mean time survival (RMST) and restricted mean time lost (RMTL) for Swedish patients with total hip arthroplasties (THA) due to primary osteoarthritis (OA) 1999-2015.

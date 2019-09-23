@@ -99,7 +99,7 @@ RMST $= \mu(\tau)= \int_0^\tau S(t)dt$ where we estimate the survival $S$ by Kap
 
 Instead of looking at the life expectancy up to a certain time point, we could also estimate the time lost up to that time-point, the restricted mean time lost ($RMTL(\tau) = \tau-RMST(\tau)$). If $\tau$ is known and fixed, both RMST and RMTL are asymptotically normally distributed [@Andersen2012] with variance [@Royston2013] $\sigma^2 = 2 \int_0^\tau S(t)dt - [\int_0^\tau tS(t)dt ]^2$. Standard routines can therefore be used for confidence intervals and statistical inference. 
 
-Statistical analyses were run in `r substr(R.version.string, 1, 15)` (R Foundation, Vienna, Austria). R scripts for the analysis are found at **XXX**. 
+Statistical analyses were run in `r substr(R.version.string, 1, 15)` (R Foundation, Vienna, Austria). R scripts for the analysis are found at https://doi.org/10.5281/zenodo.3458030.
 
 
 ## Ethics
