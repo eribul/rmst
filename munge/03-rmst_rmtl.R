@@ -41,6 +41,6 @@ rmst_rmtl <-
   ) %>%
   unnest(days_lost) %>%
   mutate(years = days / 365) %>%
-  nest(-strata)
+  nest(data = -strata)
 
 cache("rmst_rmtl")

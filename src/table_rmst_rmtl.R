@@ -8,7 +8,7 @@ table_rmst_rmtl <-
   transmute(
     ECI = gsub("ECI=", "", strata),
     time = case_when(
-      years < 1  ~ sprintf("%.0f days", days),
+      years < 1  ~ "1 / 4 years",
       years == 1 ~ "1 year",
       years > 1  ~ sprintf("%.0f years", years)
     ),
@@ -20,6 +20,6 @@ table_rmst_rmtl <-
   mutate(
     ECI = if_else(duplicated(ECI), "", ECI)
   ) %>%
-  select(ECI, Measure, `90 days`, everything())
+  select(ECI, Measure, `1 year`, `5 years`, `10 years`)
 
 cache("table_rmst_rmtl")

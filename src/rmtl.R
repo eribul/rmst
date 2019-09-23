@@ -1,6 +1,7 @@
 library(ProjectTemplate)
 load.project()
 
+rmst_rmtl <- mutate(rmst_rmtl, strata = as.factor(strata))
 
 # Reference values from ECI = 0
 rmtl_ref <-
@@ -28,6 +29,7 @@ rmtl_rr <-
   ) %>%
   filter(years >= 1)
 
+cache("rmtl_rr")
 
 # RMTL Figure -----------------------------------------------------------------
 
@@ -53,3 +55,5 @@ rmtl_rr %>%
   scale_y_continuous(breaks = 0:8, minor_breaks = NULL)
 
 ggsave("graphs/rmtl.png", height = 10, width = 10, units = "cm")
+ggsave("graphs/rmtl.tiff", height = 10, width = 10, units = "cm", dpi = 1200, compression = "lzw")
+

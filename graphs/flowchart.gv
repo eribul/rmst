@@ -1,0 +1,32 @@
+digraph flowchart {
+
+  edge [penwidth = 2, len = 1]
+
+  node  [fontname = Helvetica, shape = rectangle, width = 2]
+  all   [label = '@@1']
+  excl1 [label = '@@2']
+  incl1 [label = '@@3']
+  excl2 [label = '@@4']
+  goal  [label = '@@5']
+
+  node [label = '', width = 0]
+  e1 e2
+
+  {rank = all}
+  {rank = same e1 excl1}
+  {rank = incl1}
+  {rank = same e2 excl2}
+  {rank = goal}
+
+  # edge definitions with the node IDs
+  all   -> e1 [arrowhead = none, arrowtail = none]
+  e1    -> {excl1 incl1}
+  incl1 -> e2 [arrowhead = none, arrowtail = none]
+  e2    -> {excl2 goal}
+}
+
+[1]: sprintf('THA 1999-2015\n (n = %s)\n (%s patients)', ns$all_tha, ns$all_pat)
+[2]: sprintf('First bilaterals\n (n = %s)', ns$excl1)
+[3]: sprintf('Last operated hip\n (n = %s)', ns$incl1)
+[4]: sprintf('Incorrect dates of \nsurgery and/or death\n (n = %s)', ns$excl2)
+[5]: sprintf('Included\n (n = %s)', ns$goal)

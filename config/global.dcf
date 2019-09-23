@@ -13,7 +13,10 @@ libraries:
   RSQLite,
   survival,
   survminer,
-  tableone
+  tableone,
+  DiagrammeR,
+  DiagrammeRsvg,
+  rsvg
 as_factors:                FALSE
 tables_type:               tibble
 attach_internal_libraries: FALSE

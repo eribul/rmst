@@ -28,4 +28,5 @@ rmst %>%
     legend.title         = element_blank()
   )
 
-ggsave("graphs/rmst.png", height = 10, width = 10, units = "cm")
+ggsave("graphs/rmst.png",  height = 10, width = 10, units = "cm")
+ggsave("graphs/rmst.tiff", height = 10, width = 10, units = "cm", dpi = 1200, compression = "lzw")
