@@ -5,23 +5,21 @@ cache("elix_fit")
 
 # Calculate RSTM and RMTL based on KM-fit
 
-rm_ci <- function(days, fit, alpha = 0.05 ){
+rm_days <- function(days, fit, alpha = 0.05 ){
 
   sm   <- survival:::survmean(fit, rmean = days)[[1]]
-  rmst <- sm[,"*rmean"] / 365
+  rmst <- sm[,"*rmean"]
   z    <- qnorm(1 - alpha / 2)
 
   tibble(
     strata    = names(rmst),
     rmst      = rmst,
-    rmtl      = days / 365 - rmst,
-    se        = sm[,"*se(rmean)"] / 365,
-    rmst_ll   = rmst - z * se,
+    rmtl      = days - rmst,
+    se        = sm[,"*se(rmean)"],
+    rmst_ll   = pmax(0L, rmst - z * se),
     rmst_ul   = rmst + z * se,
-    rmtl_ll   = rmtl - z * se,
-    rmtl_ul   = rmtl + z * se,
-    rmst_text = sprintf("%.2f (%.2f-%.2f)", rmst, rmst_ll, rmst_ul),
-    rmtl_text = sprintf("%.2f (%.2f-%.2f)", rmtl, rmtl_ll, rmtl_ul)
+    rmtl_ll   = pmax(0L, rmtl - z * se),
+    rmtl_ul   = rmtl + z * se
   )
 }
 
@@ -37,10 +35,21 @@ rmst_rmtl <-
     days = days
   ) %>%
   mutate(
-    days_lost = map(days, rm_ci, elix_fit)
+    days_lost = map(days, rm_days, elix_fit)
   ) %>%
   unnest(days_lost) %>%
-  mutate(years = days / 365) %>%
+  mutate(
+    rmst_text_days = sprintf("%.1f (%.1f-%.1f)", rmst, rmst_ll, rmst_ul),
+    rmtl_text_days = sprintf("%.1f (%.1f-%.1f)", rmtl, rmtl_ll, rmtl_ul),
+
+    years = days / 365, # Integer for later identification/filtering
+    rmst_text_years =
+      sprintf("%.2f (%.2f-%.2f)",
+        rmst / 365.241, rmst_ll / 365.241, rmst_ul / 365.241),
+    rmtl_text_years =
+      sprintf("%.2f (%.2f-%.2f)",
+        rmtl / 365.241, rmtl_ll / 365.241, rmtl_ul / 365.241)
+  ) %>%
   nest(data = -strata)
 
 cache("rmst_rmtl")
