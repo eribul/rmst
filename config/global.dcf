@@ -17,7 +17,9 @@ libraries:
   DiagrammeR,
   DiagrammeRsvg,
   rsvg,
-  survRM2
+  prodlim,
+  geepack,
+  furrr
 as_factors:                FALSE
 tables_type:               tibble
 attach_internal_libraries: FALSE
