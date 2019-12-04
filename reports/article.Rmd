@@ -10,7 +10,7 @@ csl: http://www.zotero.org/styles/jama
 
 ```{r setup, include = FALSE}
 options(
-  digits            = 1,
+  digits            = 2,
   knitr.kable.NA    = '',
   repos = list(CRAN = "https://cran.rstudio.com/")
 )
@@ -24,20 +24,15 @@ load("../cache/rmst_rmtl.RData")
 rmtl <- 
   rmst_rmtl %>% 
   unnest(cols = data) %>% 
-  filter(days %in% c(30, 90, 3650))
+  filter(days %in% c(90, 3650))
 
-rmtl30d <- filter(rmtl, days == 30) %>% mutate(rmtl = rmtl * 365.241 * 24)
-rmtl90d <- filter(rmtl, days == 90) %>% mutate(rmtl = rmtl * 365.241)
+rmtl90d <- filter(rmtl, days == 90)
 rmtl10y <- filter(rmtl, days == 3650)
 ```
 
-ORIGINAL RESEARCH
+# Co-morbidity decreased restricted mean survival time for patients with total hip arthroplasty: An observational register study of `r N` patients from the Swedish Hip Arthroplasty Register 1999-2015
 
-Bulow et al.
-
-# Restricted mean survival time decrease with increased comorbidity for patients with total hip arthroplasty: An observational register study of `r N` patients from the Swedish Hip Arthroplasty Register 1999-2015
-
-Erik Bulow^1,2^
+Erik Bülow^1,2^
 Ola Rolfson^1,2^
 Szilard Nemes^1,2^
 
@@ -45,61 +40,49 @@ Szilard Nemes^1,2^
 ^1^	Swedish Hip Arthroplasty Register, Gothenburg, Sweden. 
 ^2^	Department of Orthopaedics, Institute of Clinical Sciences, The Sahlgrenska Academy, University of Gothenburg, Gothenburg, Sweden. 
 
-*Correspondence:* Erik Bulow, SHPR, Registercentrum Vastra Gotaland, 415 43 Gothenburg, Sweden.
-Tel: +46 7008234 28. E-mail: erik.bulow@rccvast.se
+*Correspondence:* Erik Bülow, SHPR, Registercentrum Västra Götaland, 415 43 Gothenburg, Sweden.
+Tel: +46 7008234 28. E-mail: erik.bulow@vgregion.se
 
 
 # Abstract
 
-<!-- Max 300 words -->
+**Purpose — ** We investigated association between increased co-morbidity and remaining life time, for patients with elective total hip arthroplasty (THA) in a Swedish national cohort.
 
-**Purpose — ** We investigated the long-term association between increased comorbidity and remaining life time, for patients with total hip arthroplasty (THA) in a Swedish national cohort.
+**Patients and methods — ** We studied `r N` patients operated with THA due to osteoarthritis 1999-2015, recorded in the Swedish Hip Arthroplasty Register, linked to the National Patient Register from the National Board of Health and Welfare. We estimated the restricted mean survival time (RMST), and the restricted mean time lost (RMTL) stratified by the Elixhauser co-morbidity index. Covariate adjustment were made performed using pseudo-observations and generalized estimation equations (GEE).
 
-**Patients and methods — ** We studied `r N` patients operated with THA 1999-2015, recorded in the Swedish Hip Arthroplasty Register, linked to the National Patient Register from the National Board of Health and Welfare. We estimated the restricted mean survival time (RMST), and the restricted mean time lost (RMTL) stratified by the Elixhauser comorbidity index. 
+**Results — ** RMTL 90 days (95 % CI) after surgery ranged from `r min(rmtl90d$rmtl_text_days)` to  `r max(rmtl90d$rmtl_text_days)` days and increased by co-morbidity. RMTL 10 years after surgery ranged from `r min(rmtl10y$rmtl_text_years)` years for no co-morbidity to `r max(rmtl10y$rmtl_text_years)` years for 4 or more co-morbidities. Adjustment for age and sex led to similar results, although age was more important for long-term survival.
 
-**Results — ** RMTL 90 days after surgery ranged from `r min(rmtl90d$rmtl)` to  `r max(rmtl90d$rmtl)` days and increased by comorbidity. Differences were statistically significant but likely clinically irrelevant. RMTL 10 years after surgery ranged from `r round(min(rmtl10y$rmtl) * 365.241)` days (no comorbidity) to `r max(rmtl10y$rmtl)` years (4 or more comorbidities). Those differences were statistically significant and clinically relevant. 
-
-**Conclusion — ** Baseline comorbidity indicates expected long-term survival after THA.
+**Conclusion — ** Baseline co-morbidity indicates decreased long-term survival after THA. Health administrators should be aware of the potential risk of shortened life in patients with multiple co-morbidities. This has important implications for an ageing population and with a widening range of patients deemed suitable for THA.
 
 **Keywords:** survival analysis, hip replacement, Elixhauser, register study
 
 
 # Introduction
 
-Comorbidity indices (such as proposed by Elixhauser et al.[@Elixhauser1998] or Charlson et al.[@Charlson1987]) are common components of joint replacement studies. It has been showed however that they add little to the understanding of health-related quality of life [@Greene2015a], occurrence of re-operations [@Gordon2013] or mortality [@Bulow2017]. Beside considering comorbidity indices and joint replacement, these papers have yet another common theme, they are predictive studies, and their assessment strictly applies to predictions. Prediction and estimation are often used interchangeably, although a clear distinction should be made [@Shmueli2011]. Predictive studies or risk calculators aim to predict the outcome for a specific patient (or groups of patients with similar characteristics). Baseline comorbidity indices seemingly adds little in this case. Etiological studies of association between exposures and outcomes on the other hand, could still benefit from considering comorbidity on a population level. Such studies have showed that comorbidity indices are associated with survival [@Glassou2017], as well as with medical expenses [@Penna2019], for patients on average.
+Co-morbidity, such as measured by the Elixhauser comorbidity index [@Elixhauser1998], is a common components of joint replacement studies. It has been showed however that co-morbidity add little to the understanding of health-related quality of life [@Greene2015a], occurrence of re-operations [@Gordon2013] or mortality [@Bulow2017]. Beside considering co-morbidity indices and joint replacement, those findings have yet another common theme. They are predictive studies, and their assessment strictly applies to predictions. Prediction and estimation are often used interchangeably, although a clear distinction should be made [@Shmueli2011]. Predictive studies or risk calculators aim to predict the outcome for a specific patient (or groups of patients with similar characteristics). Baseline co-morbidity indices seemingly adds little in this case. Etiological studies of association between exposures and outcomes on the other hand, could still benefit from considering co-morbidity on a population level. Such studies have showed that co-morbidity indices are associated with for example survival [@Glassou2017], as well as with medical expenses [@Penna2019], for patients on average.
 
-Our aim in this paper was to assess the association between the Elixhauser comorbidity index and the expected remaining survival time after total hip arthroplasty (THA). This study is descriptive and departs from usual regression modeling as it does not rely on hazard ratios. Instead, we focus on group specific survival times, a clinically meaningful and model-free measure [@Uno2014; @Irwin1949]. The restricted mean survival time and the restricted mean time lost [@Royston2013] give the average remaining life expectancy of patients, and inversely the life time lost up to a pre-defined time point. Both measures are easily interpreted as their unit is a measure of time (days, months or years) and they are easily estimated at clinically meaningful time points. 
+Our aim in this paper was to assess the association between the Elixhauser co-morbidity index and the expected remaining survival time after total hip arthroplasty (THA). This study is descriptive and departs from usual regression modeling as it does not rely on hazard ratios. Instead, we focus on group specific survival times, a clinically meaningful and model-free measure [@Uno2014; @Irwin1949]. The restricted mean survival time and the restricted mean time lost [@Royston2013] give the average remaining life expectancy of patients, and inversely the life time lost up to a pre-defined time point. Both measures are easily interpreted as their unit is a measure of time (days, months or years) and they are easily estimated at clinically meaningful time points. 
 
 
 # Patients and Methods
 
 
-## Patients
+We identified patients from the Swedish Hip Arthroplasty Register (SHAR) who underwent THA for primary hip osteoarthritis 1999–2015 (Figure \@ref(fig:flowchart)). For patients with bilateral THA, start time was set at the second hip arthroplasty [@Bulow2019a].
 
-We identified patients from the Swedish Hip Arthroplasty Register (SHAR) who underwent THA for primary hip osteoarthritis 1999–2015 and who matched our inclusion criteria (Figure \@ref(fig:flowchart)). For patients with bilateral THA, start time was set at the second hip arthroplasty [@Bulow2019a].
-
-These patients were linked to the Swedish National Patient Register (NPR) using the unique Swedish identity numbers [@Cnudde2016]. NPR provided ICD-10 codes recorded at hospital visits for each patient during one year before surgery. Individual ICD-10 codes were first identified as different comorbidities by the Elixhauser comorbidity classification [@Quan2005]. The number of identified comorbidities were summed to an un-weighted index. The window for inclusion ICD-10 codes was set from 366 to 1 day prior to surgery. Patients with no recorded pre-operative hospital visit were assumed to have no comorbidity, thus Elixhauser = 0. For further details on the patient data please see [@Bulow2017]. 
+These patients were linked to the Swedish National Patient Register (NPR) using the unique Swedish identity numbers, assigned to all residents at birth or immigration.[@Cnudde2016; @Bulow2017] NPR provided ICD-10 codes recorded at hospital visits for each patient during one year before surgery. Individual ICD-10 codes were first identified as different co-morbidities by the Elixhauser co-morbidity classification [@Quan2005]. The number of identified co-morbidities were then summed to an un-weighted index. Patients with no recorded pre-operative hospital visit were assumed to have no co-morbidity, thus Elixhauser = 0.
 
 
 ## Statistical methods
 
-### Survival analysis
+We recorded five data points for each patient: the follow-up time from THA to death or censoring, an event indicator, 1 if dead or 0 if censored, the pre-operative Elixhauser co-morbidity index, age and sex. We used the Kaplan-Meier estimator to calculate survival curves, $S(t)$, stratified by the Elixhauser co-morbidity index. The mean survival time is given by $E[T]= \int_0^\infty S(t)dt$. This measure however can only be estimated if we do not have any censoring, hence if the life length of every patient is known. This is not the case due to administrative censoring. All patients, still alive by the 31st of December 2017, where censored by this date. We did not know how long they survived thereafter.
 
-For each patient we recorded three data points, the follow-up time, an event indicator and the pre-operative Elixhauser comorbidity index. The event indicator takes value 1 if the patient deceased, 0 otherwise. We used the Kaplan-Meier estimator to calculate survival curves, $S(t)$, stratified by the Elixhauser comorbidity index. The mean survival time is given by $E[T]= \int_0^\infty S(t)dt$. This measure however can only be estimated if we do not have any censoring, hence if the life length of every patient is known. This is not the case. 
+An alternative to $E[T]$ is the $\tau$-restricted mean survival time (RMST). Here, we do not aim to follow all patients to their death, $T$, but only to a pre-defined time point, $\tau \leq T$. RMST $= \mu(\tau)= \int_0^\tau S(t)dt$ where we estimate the survival ($S$) by Kaplan-Meier ($\hat S$). RMST is the average number of years (or a period of any other time unit) survived before time $\tau$. 
 
+We could also estimate the inverse of RMST, the restricted mean time lost, $RMTL(\tau) = \tau-RMST(\tau)$, up to a certain time-point. If $\tau$ is known and fixed, both RMST and RMTL are asymptotically normally distributed [@Andersen2012] with variance [@Royston2013] $\sigma^2 = 2 \int_0^\tau S(t)dt - [\int_0^\tau tS(t)dt ]^2$. Standard routines can therefore be used for confidence intervals and inference. Differences were considered statistically significant if 95 % confidence intervals did not overlap. Such hypothesis were evaluated for 90 days, as well as 1, 5 and 10 years after THA. 
 
-### Restricted Mean Time Survival
+Additional covariate adjustments were made for age and sex in a regression model. This was based on pseudo-observations defined as $\hat S_i(t) = n \cdot \hat S(t)- (n-1)\hat S^{-i}(t)$ for each patient $i = 1, \ldots, n$ where $\hat S$ and $\hat S ^{-i}$ are the Kaplan-Meier estimators based on all, and all but the $i$:th, patient respectively. RMST was then estimated by $\int_0^\tau \hat S_i (t) dt$ and regressed by generalized estimation equations (EEG).[@Andersen2010]
 
-An alternative to $E[T]$ is the $\tau$-restricted mean survival time (RMST). Here, we do not aim to follow all patients to their death, $T$, but only to a pre-defined length of time, $\tau \leq T$. 
-
-RMST $= \mu(\tau)= \int_0^\tau S(t)dt$ where we estimate the survival $S$ by Kaplan-Meier. It is the average number of years (or a period of any other time unit) survived before time $\tau$. 
-
-
-### Restricted Mean Time Lost
-
-Instead of looking at the life expectancy up to a certain time point, we could also estimate the time lost up to that time-point, the restricted mean time lost ($RMTL(\tau) = \tau-RMST(\tau)$). If $\tau$ is known and fixed, both RMST and RMTL are asymptotically normally distributed [@Andersen2012] with variance [@Royston2013] $\sigma^2 = 2 \int_0^\tau S(t)dt - [\int_0^\tau tS(t)dt ]^2$. Standard routines can therefore be used for confidence intervals and statistical inference. 
-
-Statistical analyses were run in `r substr(R.version.string, 1, 15)` (R Foundation, Vienna, Austria). R scripts for the analysis are found at https://doi.org/10.5281/zenodo.3458030.
+We used `r substr(R.version.string, 1, 15)` (R Foundation, Vienna, Austria) for statistical analysis, with significant packages: survival, prodlim and geepack. R scripts are available at https://doi.org/10.5281/zenodo.3458030. We are not able to share patient data however due to privacy concerns.
 
 
 ## Ethics
@@ -115,28 +98,46 @@ n <- count(df, ECI) %>% deframe()
 p <- sprintf("%.0f %%", n / sum(n) * 100)
 load("../cache/rmtl_rr.RData")
 rr <- rmtl_rr %>% filter(years == 1)
+
+load("../cache/regr_tidy.RData")
+
+rmtl10yregr <- function(t, ci = "ci") {
+  regr_tidy %>% 
+    filter(days == 3650, model == "Adjusted", term == t) %>% 
+    select(!!ci) %>% 
+    pluck(1)
+}
+
+
 ```
 
-There were `r N` patients included in the study (Figure \@ref(fig:flowchart)). `r p[1]` had no comorbidities, `r p[2]` had one, `r p[3]` had two, `r p[4]` three and `r p[5]` had four or more (Table \@ref(tab:table1)).
-From the onset of the follow-up we saw a clear association between survival and the Elixhauser comorbidity index (Figure \@ref(fig:rmst)). The expected life time lost (RMTL) increased with comorbidity (Table \@ref(tab:tableres)). Differences were statistically significant. Although, at the beginning of the follow-up this difference was small. The time lost in the first 30 days after  hip replacement did not exceed `r ceiling(max(rmtl30d$rmtl))` hours. This difference is clinically irrelevant. At 10 years however, patients with no pre-operative comorbidity (Elixhauser = 0) had lost less than `r ceiling(min(rmtl10y$rmtl))` year of life time, while patients with at least four comorbidities lost more than `r floor(max(rmtl10y$rmtl))` years. This difference is clinically relevant. 
+There were `r N` patients included in the study (Figure \@ref(fig:flowchart)). `r p[1]` had no co-morbidities according to Elixhauser, `r p[2]` had one, `r p[3]` had two, `r p[4]` three and `r p[5]` had four or more. Each co-morbidity, except uncomplicated hypertension, was more common among patients who died (Table \@ref(tab:table1)).
+From the onset of the follow-up, we saw a clear association between survival and the Elixhauser co-morbidity index (Figure \@ref(fig:rmst)). The expected life time lost (RMTL) increased with co-morbidity (Table \@ref(tab:tableres)). Differences were statistically significant with non-overlapping confidence intervals. 
 
-RMTL was between factor `r min(rr$ll)` and factor `r max(rr$ul)` higher in groups with comorbidities compared to patients without. The difference was less notable with passing time (Figure \@ref(fig:rmtl)). 
+RMTL at 90 days (95 % CI) ranged from `r min(rmtl90d$rmtl_text_days)` days for patients with no co-morbidity to `r max(rmtl90d$rmtl_text_days)` days for patients with at least 4 co-morbidities. At 10 years, patients with no pre-operative co-morbidity (Elixhauser = 0) had lost `r min(rmtl10y$rmtl_text_years)` year of life, while patients with at least four co-morbidities lost `r max(rmtl10y$rmtl_text_years)` years. This difference is clinically relevant. 
+
+RMTL was between factor `r min(rr$ll)` and factor `r max(rr$ul)` higher in groups with co-morbidities compared to patients without. The difference got less notable with passing time (Figure \@ref(fig:rmtl)). 
+
+Regression modelling with and without adjustment for age and sex led to similar results (Figure \@ref(tab:reg)). The effect of age at surgery and sex increased by longer follow-up. With 10 year follow-up, each additional year of age decreased life expectancy with almost a month, `r rmtl10yregr("Age70", "ci_days")` days. The shortening effect of being male was almost twice the effect of having 1 versus 0 co-morbidities: `r rmtl10yregr("SexMale", "ci_days")` versus `r rmtl10yregr("ECI1", "ci_days")` less days.
+
 
 
 # Discussion
 
-Neither a clinician nor a survival curve can accurately predict how long a patient will live. We have also previously showed that ranking of individual survival times based on comorbidity, such as the Elixhauser index, have low precision [@Bulow2017; @Bulow2019]. We have seen here however that there is a clear separation on group level between patients with different Elixhauser scores. Thus, for health administrative purposes there might be added value in considering comorbidities, although less so for individual patient predictions.
+Neither a clinician nor a survival curve can accurately predict how long a patient will live. We have also previously showed that ranking of individual survival times based on co-morbidity, such as the Elixhauser index, have low precision [@Bulow2017; @Bulow2019]. We have seen here however that there is a clear separation on group level between patients with different Elixhauser scores. Thus, for health administrative purposes there might be added value in considering co-morbidities, although less so for individual patient predictions.
 
-There is a known increase in short-term mortality after hip replacement [@Pedersen2011; @Cnudde2018b], which is likely influenced by patient co-morbidity. We also saw that the relative RMTL was higher in the beginning of the follow-up period, compared to the end (Figure \@ref(fig:rmtl)), but that the absolute values of RMST decreased with time for all comorbidity groups (Figure \@ref(fig:rmst)). The 90-day RMTL for patients with at least four comorbidities was only `r round(max(rmtl90d$rmtl))` day, approximately `r max(rr$ul)` times longer than for patients without comorbidity. This relative difference decreased with time. At 10-years follow up, patients with at least four comorbidities lost `r  max(rmtl_rr[rmtl_rr$years == 10, "rr"])` times as mush life time, compared to the group without comorbidity. This convergence of relative RMTL coincides with previously reported time-decreasing predictive power of comorbidity on mortality [@Bulow2017]. 
+There is a known increase in short-term mortality after hip replacement [@Pedersen2011; @Cnudde2018b], which is likely influenced by patient co-morbidity. We also saw that the relative RMTL was higher in the beginning of the follow-up period, compared to the end (Figure \@ref(fig:rmtl)), but that the absolute values of RMST decreased with time for all co-morbidity groups (Figure \@ref(fig:rmst)). The 90-day RMTL for patients with at least four co-morbidities was only `r round(max(rmtl90d$rmtl))` day, approximately `r max(rr$ul)` times longer than for patients without co-morbidity. This relative difference decreased with time. At 10-years follow up, patients with at least four co-morbidities lost `r  max(rmtl_rr[rmtl_rr$years == 10, "rr"])` times as much life time, compared to the group without co-morbidity. This convergence of relative RMTL coincides with previously reported time-decreasing predictive power of co-morbidity on mortality [@Bulow2017].
 
-If we follow the dichotomy by Shmueli et al. [@Shmueli2011] we could conclude that predictive studies/risk calculators gain little from considering the Elixhauser comorbidity index. However, for studies that aim to estimate effects of different treatment options, comorbidity indices can be important confounders and are important for case-mix adjustments [@Inacio2015a]. Health-care administrators for example might gain knowledge from considering comorbidities to better estimate the future need of revisions. The revision rate of hip replacements is low [@Bayliss2017] but patient survival increase over time [@Schwartsmann2015]. It is therefore important to estimate the long-term survival for patients at risk, wherefore comorbidities are relevant. 
+If we follow the dichotomy by Shmueli et al. [@Shmueli2011] we could conclude that predictive studies/risk calculators gain little from considering the Elixhauser co-morbidity index. However, for studies that aim to estimate effects of different treatment options, co-morbidity indices can be important confounders and are relevant for case-mix adjustments [@Inacio2015a]. Health-care administrators for example might gain knowledge from considering co-morbidities to better estimate the future need of revisions. The revision rate of hip replacements is low [@Bayliss2017] but patient survival increase over time [@Schwartsmann2015]. It is therefore important to estimate the long-term survival for patients at risk, wherefore co-morbidities are relevant. 
 
-It could be argued that the absence of covariate adjustment is a limitation to the study. It was seen in table \@ref(tab:table1) that age and sex are also associated with death and we have showed earlier that those variables are better predictors of long-term survival [@Bulow2017; @Bulow2019]. Theoretical methods for such adjustment have been suggested in the litterature [@Tian2014; @Conner2018] but software implementations are limited and sub-optimal. We therefore focused on crude estimates, which we thoughgt were most relevant to this study.
+A possible limitation is the reliance on administrative data for the Elixhauser co-morbidity index. Severe co-morbidities have good coverage in the patient register, but less severe conditions, such s hypertension and obesity are less well recorded [@Ludvigsson2011]. We assumed that patients with no recorded hospital visits during the year before THA had no co-morbidity. Additional co-morbidities might be found from primary care, but such data were not available to us. We do think the assumption of no co-morbidity is reasonable however, since the population with elective THA is generally healthy [@Cnudde2018b].
+
+We consider the regression analysis a strength of the study.[@Karrison2018] Regression is mainstream in survival analysis when modelling the hazard function, but less so for RMST. Several methods have been suggested: based on ANCOVA, piece-wise exponentials, accelerated failure time, or either synthetic- or pseudo-data.[@Tian2014; @Andersen2010; @Karrison2018] We choose the last method where every patient was assigned a pseudo-observation and where generalised estimation equations (GEE) relates regression coefficients directly to the RMST. The interpretation is intuitive and free of parametric assumptions. 
 
 
 # Conclusion
 
-Baseline comorbidity indicates expected long-term survival after THA.
+Baseline co-morbidity indicates decreased long-term survival after THA. Health administrators should be aware of the potential greater risk of shortened life in patients with multiple co-morbidities. This has important implications for an ageing population and with a widening range of patients deemed suitable for THA.
 
 # Disclosure
 
@@ -149,7 +150,10 @@ Grants from the Swedish state under the agreement between the Swedish government
 
 ```{r table1}
 load("../cache/table1.RData")
-tableone::kableone(
+library(tableone)
+table1 <- print(table1, printToggle = FALSE)
+rownames(table1) <- gsub(" = TRUE", "", rownames(table1))
+knitr::kable(
   table1, 
   caption = sprintf("Demography for the %s patients with total hip arthroplasty.", N)
 )
@@ -159,8 +163,16 @@ tableone::kableone(
 load("../cache/table_rmst_rmtl.RData")
 knitr::kable(
   table_rmst_rmtl, 
-  caption = sprintf("Restricted mean time survival (RMST) and restricted mean time lost (RMTL) for the %s patients with total hip arthroplasty. RMST + RMTL should equal the whole period in each column. RMST decrease by increased comorbidity.", N)
+  caption = sprintf("Restricted mean time survival (RMST) and restricted mean time lost (RMTL) for the %s patients with total hip arthroplasty. RMST + RMTL should equal the whole period in each column. RMST decrease by increased co-morbidity.", N)
   )
+```
+
+```{r reg}
+load("../cache/regr_table.RData")
+knitr::kable(
+  regr_table,
+  caption = "Crude, as well as age- and sex-adjusted regression coefficients from a generalized estimation equation (GEE) model applied to pseudo survival observations. The mean age (70 years) was subtracted from the age variable to yield a more interpretable base line. All estimates are given in days."
+)
 ```
 
 
@@ -172,12 +184,12 @@ knitr::include_graphics("../graphs/flowchart.png")
 ```
 
 
-```{r rmst, fig.cap = "Restricted mean survival time (RMST) during 10 years follow-up stratified by the Elixhauser comorbidity index."}
+```{r rmst, fig.cap = "Restricted mean survival time (RMST) during 10 years follow-up stratified by the Elixhauser co-morbidity index. The dashed line indicates potential RMST equal to complete follow-up. Deviations below this line indicates shorter RMST. For example with 10 years follow-up (x-axis), patients with at least four co-morbidities survived, on average, less than 7 years (y-axis)."}
 knitr::include_graphics("../graphs/rmst.png")
 ```
 
 
-```{r rmtl, fig.cap = "Relative change in restricted mean time lost (RMLT) with increasing Elixhauser comorbidity index with comorbidity free patients as reference."}
+```{r rmtl, fig.cap = "Relative change in restricted mean time lost (RMLT) with increasing Elixhauser co-morbidity index with co-morbidity free patients as reference. Shaded areas illustrate 95 % confidence intervals."}
 knitr::include_graphics("../graphs/rmtl.png")
 ```
 

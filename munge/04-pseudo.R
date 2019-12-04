@@ -10,14 +10,12 @@ df <-
 
 f <- prodlim(Hist(t, d) ~ 1, df)
 
-ds <- seq_len(3650)
-ps <- jackknife(f, times = ds); gc()
+ds <- seq_len(3650) # Every day up to 10 years
+ps <- jackknife(f, times = ds); gc() # pseudo survivals for each day
+ps <- apply(ps, 1, cumsum); gc() # numerical integration to get RMST up to each day
+ps <- t(ps) # apply rtansform the reslut so should be taken back
 
-
-ps <- apply(ps, 1, cumsum); gc()
-ps <- t(ps)
-
-ds_show <- c(90, 365 * c(1, 5, 10))
+ds_show <- c(90, 365 * c(1, 5, 10)) # days to include in results
 ps_ds <- ps[, ds_show]
 colnames(ps_ds) <- paste0("mu.", ds_show)
 

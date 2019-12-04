@@ -25,7 +25,8 @@ rmtl_rr <-
     rr  = rmtl.x / rmtl.y,
     std = sqrt((se.x ^ 2 + rr ^ 2 * se.y ^ 2) / rmtl.y ^ 2),
     ll  = rr - 1.96 * std,
-    ul  = rr + 1.96 * std
+    ul  = rr + 1.96 * std,
+    Elixhauser = factor(strata, levels(strata), gsub("ECI=", "", levels(strata))),
   ) %>%
   filter(years >= 1)
 
@@ -35,10 +36,10 @@ cache("rmtl_rr")
 
 rmtl_rr %>%
   ggplot(aes(years, rr)) +
-  geom_line(aes(col = strata)) +
+  geom_line(aes(col = Elixhauser)) +
   geom_hline(yintercept = 1, color = scales::hue_pal()(1)) +
   geom_ribbon(
-    aes(ymin = ll, ymax = ul, fill = strata, alpha = 0.1),
+    aes(ymin = ll, ymax = ul, fill = Elixhauser, alpha = 0.1),
     show.legend = FALSE
   ) +
   ylab("Restricted Mean Time Lost Ratio") +
@@ -46,8 +47,7 @@ rmtl_rr %>%
   theme_minimal() +
   theme(
     legend.position      = c(1, 1),
-    legend.justification = c(1, 1),
-    legend.title = element_blank()
+    legend.justification = c(1, 1)
   ) +
   scale_color_discrete(drop = FALSE) +
   scale_fill_discrete(drop = FALSE) +

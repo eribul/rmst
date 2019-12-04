@@ -5,7 +5,8 @@ sql_prim <-
   left_join(tbl(con, "elix_1yr_before"),  c("LopNr", "P_Side")) %>%
   select(
     LopNr, P_SurgDate, DateOfDeath, P_Gender, P_Age,
-    P_ProstType, P_DiaGrp, op_last, elix_icd10_index_sum_all
+    P_ProstType, P_DiaGrp, op_last,
+    starts_with("elix_icd10"), -contains("index"), elix_icd10_index_sum_all
   )
 
 df_orig <-

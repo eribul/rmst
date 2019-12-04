@@ -1,4 +1,4 @@
-df <-
+df_tmp <-
   df_orig %>%
   filter(
     between(P_SurgDate, as.Date("1999-01-01"), as.Date("2015-12-31")),
@@ -7,21 +7,18 @@ df <-
   )
 
 n <- list()
-n$all_tha <- nrow(df)
-n$all_pat <- n_distinct(df$LopNr)
+n$all_tha <- nrow(df_tmp)
+n$all_pat <- n_distinct(df_tmp$LopNr)
 
-df      <- filter(df, as.logical(op_last))
-n$incl1 <- nrow(df)
+df_tmp      <- filter(df_tmp, as.logical(op_last))
+n$incl1 <- nrow(df_tmp)
 n$excl1 <- n$all_tha - n$incl1
 
-df      <- filter(df, is.na(DateOfDeath) | DateOfDeath >= P_SurgDate)
-n$goal  <- nrow(df)
+df_tmp      <- filter(df_tmp, is.na(DateOfDeath) | DateOfDeath >= P_SurgDate)
+n$goal  <- nrow(df_tmp)
 n$excl2 <- n$incl1 - n$goal
 
 ns <- map(n, format, big.mark = ",")
-
-cache("df")
-
 
 
 fl <-

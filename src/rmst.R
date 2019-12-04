@@ -5,13 +5,14 @@ load.project()
 rmst <-
   rmst_rmtl %>%
   unnest(data) %>%
-  select(strata, years, contains("rmst"))
+  select(strata, years, contains("rmst")) %>%
+  mutate(Elixhauser = gsub("ECI=", "", strata))
 
 rmst %>%
-  ggplot(aes(years, rmst, col = strata)) +
+  ggplot(aes(years, rmst / 365.241, col = Elixhauser)) +
   geom_line() +
   geom_ribbon(
-    aes(ymin = rmst_ll, ymax = rmst_ul, fill = strata, alpha = 0.1, col = NULL),
+    aes(ymin = rmst_ll / 365.241, ymax = rmst_ul / 365.241, fill = Elixhauser, alpha = 0.1, col = NULL),
     show.legend = FALSE
   ) +
   theme_minimal() +
@@ -24,8 +25,7 @@ rmst %>%
   xlab("Years since THA") +
   theme(
     legend.position      = c(0, 1),
-    legend.justification = c(0, 1),
-    legend.title         = element_blank()
+    legend.justification = c(0, 1)
   )
 
 ggsave("graphs/rmst.png",  height = 10, width = 10, units = "cm")
